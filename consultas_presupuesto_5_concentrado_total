@@ -1,0 +1,32 @@
+-- ============================================
+-- PASO 6: Detalle de obras a nivel de registro individual
+-- Genera la tabla base para el análisis de variación en Python.
+-- Incluye entidad federativa, programa, clave de obra, nombre
+-- de obra, y los 3 tipos de presupuesto (original, modificado,
+-- ejercido), acotado a los 4 programas del área.
+--
+-- Se excluyen los registros donde original, modificado y
+-- ejercido son cero al mismo tiempo, ya que representan
+-- filas vacías sin información presupuestal real.
+-- ============================================
+
+SELECT
+  p.ENTIDAD_FEDERATIVA,                               -- clave numérica del estado
+  e.Estado,                                            -- nombre completo del estado
+  p.PROGRAMA_PRESUPUESTARIO,                           -- clave del programa (ej. K031)
+  p.CLAVE_CARTERA AS clave_obra,                       -- clave de la obra/proyecto
+  o.nom_obra,                                          -- nombre legible de la obra
+  p.ORIGINAL,                                          -- presupuesto original
+  p.MODIFICADO_AUTORIZADO AS MODIFICADO,               -- presupuesto modificado
+  p.EJERCIDO                                           -- presupuesto ejercido
+FROM `gen-lang-client-0918133491.presupuesto_2025.presupuesto` p
+-- Une con el catálogo de estados para traer el nombre completo
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.claves_estados` e
+  ON p.ENTIDAD_FEDERATIVA = e.EF
+-- Une con el catálogo de obras, convirtiendo ambas claves a texto
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.obras` o
+  ON CAST(p.CLAVE_CARTERA AS STRING) = CAST(o.clave_presupuestal AS STRING)
+WHERE p.PROGRAMA_PRESUPUESTARIO IN ('K031', 'K037', 'K039', 'U004')  -- acotado a los 4 programas del área
+  -- se excluyen registros totalmente vacíos (los 3 presupuestos en cero)
+  AND NOT (p.ORIGINAL = 0 AND p.MODIFICADO_AUTORIZADO = 0 AND p.EJERCIDO = 0)
+ORDER BY p.ENTIDAD_FEDERATIVA ASC;   -- orden ascendente por entidad federativa

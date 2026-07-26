@@ -1,0 +1,32 @@
+-- ============================================
+-- PASO 3: Concentración del gasto por programa y estado
+-- Responde la pregunta: ¿dónde se concentra el presupuesto
+-- (original, modificado y ejercido) entre los 4 programas
+-- del área, y en qué estados?
+-- Se enriquece la tabla principal con los nombres de
+-- programa y de estado mediante JOIN con los catálogos.
+--
+-- Nota: no se incluye conteo de registros, ya que una misma
+-- obra puede aparecer en varias filas (una por partida), por
+-- lo que un conteo de filas no representa el número real de
+-- obras. Ese detalle se abordará más adelante si se requiere
+-- un conteo de obras únicas.
+-- ============================================
+
+SELECT
+  p.PROGRAMA_PRESUPUESTARIO,                    -- clave del programa (ej. K031)
+  n.nombre_programa,                             -- nombre legible del programa
+  e.Estado,                                      -- nombre completo del estado
+  SUM(p.ORIGINAL) AS total_original,             -- suma del presupuesto original
+  SUM(p.MODIFICADO_AUTORIZADO) AS total_modificado,  -- suma del presupuesto modificado
+  SUM(p.EJERCIDO) AS total_ejercido              -- suma del presupuesto ejercido
+FROM `gen-lang-client-0918133491.presupuesto_2025.presupuesto` p
+-- Une con el catálogo de programas para traer el nombre legible
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.nombres_program_presup` n
+  ON p.PROGRAMA_PRESUPUESTARIO = n.PROGRAMA_PRESUPUESTARIO
+-- Une con el catálogo de estados para traer el nombre completo
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.claves_estados` e
+  ON p.ENTIDAD_FEDERATIVA = e.EF
+WHERE p.PROGRAMA_PRESUPUESTARIO IN ('K031', 'K037', 'K039', 'U004')  -- acotado a los 4 programas del área
+GROUP BY p.PROGRAMA_PRESUPUESTARIO, n.nombre_programa, e.Estado
+ORDER BY p.PROGRAMA_PRESUPUESTARIO ASC, e.Estado ASC;   -- orden alfabético/ascendente: primero por programa, luego por estado

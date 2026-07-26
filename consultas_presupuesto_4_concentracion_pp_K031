@@ -1,0 +1,31 @@
+-- ============================================
+-- PASO 5: Concentración del gasto por obra (programa K031)
+-- Responde: dentro del programa de Construcción y
+-- modernización, ¿qué obras concentran el mayor presupuesto?
+-- Se agrupa por clave de obra (no por registro/partida), se
+-- enriquece con el nombre real de la obra (catálogo de obras)
+-- y con el nombre del estado (catálogo de estados).
+--
+-- Nota: CLAVE_CARTERA y clave_presupuestal tienen tipos de
+-- dato distintos, por lo que ambas se convierten a texto
+-- (STRING) antes de compararlas en el JOIN.
+-- ============================================
+
+SELECT
+  p.CLAVE_CARTERA,                                    -- clave de la obra/proyecto
+  o.nom_obra,                                          -- nombre legible de la obra
+  e.Estado,                                            -- nombre completo del estado
+  SUM(p.ORIGINAL) AS total_original,                  -- suma del presupuesto original de la obra
+  SUM(p.MODIFICADO_AUTORIZADO) AS total_modificado,   -- suma del presupuesto modificado de la obra
+  SUM(p.EJERCIDO) AS total_ejercido                   -- suma del presupuesto ejercido de la obra
+FROM `gen-lang-client-0918133491.presupuesto_2025.presupuesto` p
+-- Une con el catálogo de obras, convirtiendo ambas claves a texto
+-- para evitar conflictos de tipo de dato (INT64 vs STRING)
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.obras` o
+  ON CAST(p.CLAVE_CARTERA AS STRING) = CAST(o.clave_presupuestal AS STRING)
+-- Une con el catálogo de estados para traer el nombre completo
+LEFT JOIN `gen-lang-client-0918133491.presupuesto_2025.claves_estados` e
+  ON p.ENTIDAD_FEDERATIVA = e.EF
+WHERE p.PROGRAMA_PRESUPUESTARIO = 'K031'   -- acotado únicamente al programa K031
+GROUP BY p.CLAVE_CARTERA, o.nom_obra, e.Estado
+ORDER BY total_modificado DESC;   -- de mayor a menor presupuesto modificado

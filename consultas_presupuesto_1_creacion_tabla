@@ -1,0 +1,32 @@
+-- ============================================
+-- PASO 1: Crear catálogo de nombres de programas
+-- Los programas presupuestales solo vienen identificados
+-- por clave (K031, K037, etc.), así que se crea una tabla
+-- de apoyo con el nombre completo de cada uno para
+-- que el análisis sea legible.
+-- ============================================
+
+CREATE TABLE `gen-lang-client-0918133491.presupuesto_2025.nombres_program_presup` AS
+SELECT * FROM UNNEST([
+  -- Cada línea es un programa: clave + nombre descriptivo
+  STRUCT('K031' AS PROGRAMA_PRESUPUESTARIO, 'Construcción y modernización' AS nombre_programa),
+  STRUCT('K037', 'Conservación y reconstrucción'),
+  STRUCT('K039', 'Estudios y proyectos'),
+  STRUCT('U004', 'Caminos artesanales')
+]);
+
+-- ============================================
+-- PASO 2: Validar el universo de análisis
+-- Antes de calcular cualquier cifra, se confirma cuántos
+-- registros existen por cada uno de los 4 programas bajo
+-- análisis. Esto sirve para detectar errores de escritura
+-- en las claves y dimensionar el tamaño del análisis.
+-- ============================================
+
+SELECT
+  PROGRAMA_PRESUPUESTARIO,           -- clave del programa
+  COUNT(*) AS num_registros           -- cuántas filas tiene cada programa
+FROM `gen-lang-client-0918133491.presupuesto_2025.presupuesto`
+WHERE PROGRAMA_PRESUPUESTARIO IN ('K031', 'K037', 'K039', 'U004')  -- filtro: solo los 4 programas del área
+GROUP BY PROGRAMA_PRESUPUESTARIO
+ORDER BY PROGRAMA_PRESUPUESTARIO;
