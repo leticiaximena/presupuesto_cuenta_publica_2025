@@ -51,7 +51,7 @@ Archivo: `sql/consultas_presupuesto.sql`
 - Exportación del dataset final enriquecido para su conexión en Tableau
 
 Archivo: `python/analisis_variacion_cierre2025.ipynb`
-Enlace: https://colab.research.google.com/drive/1nD_zztFxlt9dfw3VAMFFhUqa0dbfOS7o?usp=sharing
+Enlace a Google Colab: https://colab.research.google.com/drive/1nD_zztFxlt9dfw3VAMFFhUqa0dbfOS7o?usp=sharing
 
 **Nota metodológica:** se evaluó también la variación entre presupuesto original y modificado, pero se descartó su inclusión en el análisis final. La mayoría de los registros no contaban con presupuesto original asignado al inicio del ejercicio (recursos incorporados vía adecuaciones presupuestales durante el año), y un caso específico correspondía a una transferencia de recursos de oficinas centrales hacia los estados. Ambos escenarios requieren contexto institucional específico que dificulta una interpretación clara y homogénea para una audiencia externa, por lo que se optó por no incluir este comparativo.
 
