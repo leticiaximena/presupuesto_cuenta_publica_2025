@@ -26,7 +26,7 @@ El análisis se acota a los cuatro programas presupuestarios bajo mi gestión di
 
 ## Fuente de datos
 
-Cifras de cierre de Cuenta Pública 2025, información pública en materia de presupuesto de infraestructura. Se utilizó una base principal de presupuesto (original, modificado y ejercido por clave de proyecto, programa y entidad federativa) junto con dos catálogos auxiliares: nombres de obra y nombres de entidad federativa.
+Cifras de cierre de Cuenta Pública 2025, información pública del Gobierno de México  en materia de presupuesto de infraestructura. Se utilizó una base principal de presupuesto (original, modificado y ejercido por clave de proyecto, programa y entidad federativa) junto con dos catálogos auxiliares: nombres de obra y nombres de entidad federativa.
 
 Archivo: `presupuesto_2025.csv`
 
@@ -64,10 +64,9 @@ Dashboard interactivo con:
 - Top 15 obras con mayor variación entre modificado y ejercido
 - Distribución de obras con y sin variación
 
-Dashboard: *[liga de Tableau Public — pendiente de publicación final]*
+Dashboard: *[liga de Tableau Public]*
 
-## Hallazgos principales
-
+## Hallazgos clave
 - El **51.8%** de las obras analizadas (156 de 301 registros) presentó reconciliación completa entre presupuesto modificado y ejercido al cierre del año.
 - El **48.2%** restante (145 registros) mostró variación real, sumando **928 millones de pesos** en conjunto, concentrados en un número reducido de proyectos con desviaciones significativas — el caso más alto asciende a **299 millones de pesos** en una sola obra.
 - La distribución del gasto entre los cuatro programas es desigual: K031 y K037 concentran la mayor parte de los registros y del presupuesto, mientras que K039 y U004 representan un volumen menor de proyectos.
